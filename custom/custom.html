@@ -1,0 +1,184 @@
+<style>
+    html {
+        background: black;
+    }
+</style>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+<link rel="stylesheet" href="https://dev.ingrub.com/psl/owlcarousel/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://dev.ingrub.com/psl/owlcarousel/assets/owl.theme.default.min.css">
+<link rel="stylesheet" href="https://dev.ingrub.com/psl/animate.min.css">
+
+<style>
+    .my-notifications {
+        bottom: 0;
+        position: fixed;
+        z-index: 99999;
+        width: 100%;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+
+    .my-notifications-two {
+        top: 0;
+        position: fixed;
+        width: 100%;
+        z-index: 99999;
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+
+
+    .notification-message {
+        background: #fff;
+        width: 300px;
+        padding: 5px;
+        border-radius: 50px;
+        min-height: 75px;
+        padding-bottom: 20px;
+    }
+
+    .user-image {
+        width: 50px !important;
+        border-radius: 50%;
+        float: left;
+        margin-top: 10px;
+        margin-left: 20px;
+    }
+
+    .user-name {
+        padding-left: 80px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        margin-top: 15px;
+    }
+
+    .lighter {
+        font-weight: 300;
+    }
+
+    .bought-details {
+        font-weight: 300;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+        padding-left: 80px;
+        padding-top: 5px;
+    }
+</style>
+<div class="my-notifications">
+    <div class="owl-carousel first_slider" id="one">
+
+    </div>
+
+</div>
+<div class="my-notifications-two">
+    <div class="owl-carousel first_slider" id="two">
+    </div>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
+    <script src="custom.js"></script>
+    <script src="https://dev.ingrub.com/psl/owlcarousel/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var one = $('#one');
+            one.owlCarousel({
+                loop: true,
+                smartSpeed: 100,
+                autoplay: true,
+                autoplaySpeed: 100,
+                mouseDrag: true,
+                margin: 10,
+                animateIn: 'slideInleft',
+                animateOut: 'fadeOut',
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    400: {
+                        items: 2
+                    },
+                    600: {
+                        items: 2
+                    },
+                    800: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+            $.ajax({
+                url: 'http://ec2-54-161-55-221.compute-1.amazonaws.com/allgetclassdetailscityWise/par0RNokJKRopkpVe8X0D8w5i2s1',
+                type: 'GET',
+                headers: {
+                    "Authorization": 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2xhc3MtZGVraG8tZm9yLWNsYXNzIiwiYXVkIjoiY2xhc3MtZGVraG8tZm9yLWNsYXNzIiwiYXV0aF90aW1lIjoxNjczNTIzODMzLCJ1c2VyX2lkIjoiSDlraGpFbnAwVmNqdHJ6OG9vdk4wcm9PTUVsMiIsInN1YiI6Ikg5a2hqRW5wMFZjanRyejhvb3ZOMHJvT01FbDIiLCJpYXQiOjE2NzM1MjM4MzMsImV4cCI6MTY3MzUyNzQzMywiZW1haWwiOiJwcC5iaXRjb2RpbmdAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicHAuYml0Y29kaW5nQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.sFcvaupyG_Z8yRUpVHZnRmca-ymmCK4wYLKCQVuC96_4WYU3eX5w3NstL7aR93HCwy1yN0Nlok6jhpYbQliiEPwBEeirsw1SzLdTa7wCwI2UKsXTVQkEJqJ6JjHiGPjNQS09mrU2nd9_7sHM7ELXhHMvE3OQrpS2mTSZPxJRIXNvigYB4Qx1bqFbbcyoNLgfAgbO8otMvby6DQ6nGz0XRTU1iHGBZiNn9W3FW1QprOHm5uwZyd7ZsqUzdLBXWor6g6QimAR_xnWl2a-AgY0nFGi_A69-GFUJ61hhfQu69eghS3Vgw6cxqRDd4-QRIrtRuBEOmA393rSwiwp0puWnXQ'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    i = 0;
+                    $.each(data.course_details, function () {
+                        one.trigger('add.owl.carousel', [jQuery('<div class="item"><div class="notification-message"><div class="user-name">' + data.course_details[i].class_name.class_name + '</div><div class="bought-details">' + + '</div></div></div>')]);
+                        i++;
+                    });
+                    one.trigger('refresh.owl.carousel');
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            var two = $('#two');
+            two.owlCarousel({
+                loop: true,
+                smartSpeed: 100,
+                autoplay: true,
+                autoplaySpeed: 100,
+                mouseDrag: true,
+                margin: 10,
+                animateIn: 'slideInleft',
+                animateOut: 'fadeOut',
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    400: {
+                        items: 2
+                    },
+                    600: {
+                        items: 2
+                    },
+                    800: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+            $.ajax({
+                url: 'http://ec2-54-161-55-221.compute-1.amazonaws.com/allgetclassdetailscityWise/par0RNokJKRopkpVe8X0D8w5i2s1',
+                type: 'GET',
+                headers: {
+                    "Authorization": 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1NWU0ZDkxOGE0ODY0YWQxMzUxMDViYmRjMDEwYWY5Njc5YzM0MTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2xhc3MtZGVraG8tZm9yLWNsYXNzIiwiYXVkIjoiY2xhc3MtZGVraG8tZm9yLWNsYXNzIiwiYXV0aF90aW1lIjoxNjczNTI5OTEyLCJ1c2VyX2lkIjoiSDlraGpFbnAwVmNqdHJ6OG9vdk4wcm9PTUVsMiIsInN1YiI6Ikg5a2hqRW5wMFZjanRyejhvb3ZOMHJvT01FbDIiLCJpYXQiOjE2NzM1Mjk5MTIsImV4cCI6MTY3MzUzMzUxMiwiZW1haWwiOiJwcC5iaXRjb2RpbmdAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicHAuYml0Y29kaW5nQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.jdeqPUwSbIrdwowgnHl_UqsiwUUSKFaIix-IiEOvAkCh7UWQmxK_5AXCf8Xuxl-b8-zIWsBhOnfSE2FTrZewQ3G_nMGRuKRPm2Wzja_iM2Obf1lWmFzA3oChyHzfkFxNQEvkXY0J6Lgv1PqgRGMvcJ5k6mPDrgJWo2yX3bj64fchO1haXvUqZ0ygCOQahBnNqB6pcpp_31wkzZ915nXu5814gvKyGgHLnuTIB7hUNBrxyD4UOu-d-fzNCexWVovFrd1VgOFqn4nilNWDjjuQJHeaFbYlCwH9_EmQas9GrCJ8ebXx4NBxl4HQahHX9RXw_F2cbV9VCzrWhT9VzpypcA'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    i = 0;
+                    $.each(data.course_details, function () {
+                        two.trigger('add.owl.carousel', [jQuery('<div class="item"><div class="notification-message"><div class="user-name">' + data.course_details[i].class_name.class_name + '</div><div class="bought-details">' + + '</div></div></div>')]);
+                        i++;
+                    });
+                    two.trigger('refresh.owl.carousel');
+                }
+            });
+        });
+    </script>
+    <script>
+
+
+    </script>

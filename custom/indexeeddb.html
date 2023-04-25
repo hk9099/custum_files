@@ -1,0 +1,174 @@
+<head>
+    <meta charset="utf-8" />
+    <title>DataTable with search, sorting and download functionality</title>
+
+    <!-- Load required libraries -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/21.1.5/css/dx.material.blue.light.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+
+    <style>
+        #gridContainer {
+            height: auto;
+        }
+
+        .dx-datagrid-header-panel {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .dx-datagrid-header-panel .dx-datagrid-search-panel {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .dx-datagrid-pager {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background-color: #fff;
+        }
+
+        #gridContainer {
+            width: 100% !important;
+        }
+
+        .dx-datagrid-content .dx-datagrid-table .dx-row>td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .dx-datagrid-headers {
+            color: #959595;
+            font-weight: 400;
+            -ms-touch-action: pinch-zoom;
+            touch-action: pinch-zoom;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 77px;
+            border: none;
+            background: #fff;
+            z-index: 11;
+        }
+    </style>
+</head>
+
+<body class="dx-viewport">
+    <a href="/" class="back"> <i class="fas fa-arrow-left"></i> </a>
+    <style>
+        .back {
+            color: #fff !important;
+            font-size: 20px;
+            text-decoration: none;
+            background: #000;
+            padding: 10px 15px;
+            margin: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .back:hover i {
+            transform: translateX(-5px);
+            transition: all 0.3s ease;
+        }
+    </style>
+
+    <div id="gridContainer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.2/jszip.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/21.1.4/js/dx.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/1.7.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.js"></script>
+
+    <script>
+        // Open a connection to the database
+        let request = indexedDB.open('myDatabase', 1);
+
+        // Create the object store if it doesn't exist
+        request.onupgradeneeded = function (event) {
+            let db = event.target.result;
+            db.createObjectStore('myObjectStore', { keyPath: 'id' });
+        };
+
+        // Initialize an empty array to store the data
+        let dataArray = [];
+
+        fetch(`http://ec2-13-48-47-224.eu-north-1.compute.amazonaws.com/api/request_data`)
+            .then(response => response.json())
+            .then(data => {
+                // Store the data in the array
+                dataArray = data;
+                // Add the data to the IndexedDB
+                addDataToIndexedDB(dataArray);
+
+                // Log the data array
+                console.log(dataArray, 'data array');
+            })
+            .catch(error => console.error(error));
+
+        function addDataToIndexedDB(data) {
+            let transaction = request.result.transaction(['myObjectStore'], 'readwrite');
+            let objectStore = transaction.objectStore('myObjectStore');
+
+            // Loop through the data and add each item to the object store
+            data.forEach(item => {
+                // Check if the record already exists in the object store
+                let getRequest = objectStore.get(item.id);
+                getRequest.onsuccess = function (event) {
+                    let existingItem = event.target.result;
+                    if (!existingItem) {
+                        // console.log(item, 'item');
+                        objectStore.add(item);
+                    }
+                };
+            });
+
+            // Commit the transaction to ensure data is saved
+            transaction.oncomplete = function () {
+                console.log('Data added to IndexedDB');
+
+                // Count the number of records in the object store
+            };
+            let countRequest = objectStore.count();
+            countRequest.onsuccess = function () {
+                //show data size in mb 
+                console.log(countRequest.result / 1024 / 1024, 'MB');
+            };
+
+            // Handle errors that might occur during the transaction
+            transaction.onerror = function (event) {
+                console.error('Error adding data to IndexedDB', event.target.error);
+            };
+        }
+
+        
+
+
+
+
+
+    </script>
+</body>
+
+</html>

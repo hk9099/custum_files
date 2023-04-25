@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tempus Dominus Timepicker Example</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Start Time and End Time</h1>
+        <div class="row">
+            <div class="col">
+                <label for="start-time">Start Time:</label>
+                <div class="input-group date" id="start-timepicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#start-timepicker"
+                        id="start-time" />
+                    <div class="input-group-append" data-target="#start-timepicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <label for="end-time">End Time:</label>
+                <div class="input-group date" id="end-timepicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#end-timepicker"
+                        id="end-time" />
+                    <div class="input-group-append" data-target="#end-timepicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <button type="button" class="btn btn-primary" id="add-time">Add Time</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
+<script>
+    var times = []; // Initialize an empty array to store the times)
+
+    function updateTimes() {
+        times = []; // Clear the array
+        
+        // Loop through each row and add the start and end time to the array
+        $('.row').each(function(index) {
+            var startTime = $(this).find('.datetimepicker-input').eq(0).val();
+            var endTime = $(this).find('.datetimepicker-input').eq(1).val();
+            if (startTime && endTime) {
+                times.push({ "start_time": startTime, "end_time": endTime });
+            }
+        });
+        
+        var timesJson = JSON.stringify(times); 
+        console.log(timesJson,'timesJson');
+    }
+
+    // Initialize the timepicker fields
+    $('#start-timepicker').datetimepicker({
+        format: 'LT',
+        buttons: {
+            showClose: true,
+            showToday: true,
+            showClear: true,
+            showCancel: true,
+            showOK: true
+        }
+    });
+    $('#end-timepicker').datetimepicker({
+        format: 'LT',
+        buttons: {
+            showClose: true,
+            showToday: true,
+            showClear: true,
+            showCancel: true,
+            showOK: true
+        }
+    });
+
+    // Add timepicker fields when "Add Time" button is clicked
+    counter = 0;
+    $('#add-time').click(function () {
+        //whenever click on add time button then check the time is empty or not if empty then show alert
+        if ($('#start-time').val() == '' || $('#end-time').val() == '') {
+            alert('Please select start time and end time');
+            return false;
+        }
+         if ($('#start-time-' + counter).val() == '' ||  $('#end-time-' + counter).val() == '') {
+            alert('Please select start time and end time');
+            return false;
+        } else {
+        counter++;
+        html = '<div class="row mt-3" id="row-' + counter + '">';
+        html += '<div class="col">';
+        html += '<label for="start-time">Start Time:</label>';
+        html += '<div class="input-group date" id="start-timepicker-' + counter + '" data-target-input="nearest">';
+        html += '<input type="text" class="form-control datetimepicker-input" data-target="#start-timepicker-' + counter + '" id="start-time-' + counter + '" />';
+        html += '<div class="input-group-append" data-target="#start-timepicker-' + counter + '" data-toggle="datetimepicker">';
+        html += '<div class="input-group-text"><i class="fa fa-calendar"></i></div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="col">';
+        html += '<label for="end-time">End Time:</label>';
+        html += '<div class="input-group date" id="end-timepicker-' + counter + '" data-target-input="nearest">';
+        html += '<input type="text" class="form-control datetimepicker-input" data-target="#end-timepicker-' + counter + '" id="end-time-' + counter + '" />';
+        html += '<div class="input-group-append" data-target="#end-timepicker-' + counter + '" data-toggle="datetimepicker">';
+        html += '<div class="input-group-text"><i class="fa fa-calendar"></i></div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="col">';
+        html += '<button class="btn btn-danger remove-time" type="button">Remove</button>';
+        html += '</div>';
+        html += '</div>';
+
+        
+        // Create the new row
+        row = $(html);
+
+        // Initialize the timepicker fields
+        row.find('#start-timepicker-' + counter).datetimepicker({
+            format: 'LT',
+            buttons: {
+                showClose: true,
+                showToday: true,
+                showClear: true,    
+                showCancel: true,
+                showOK: true
+            }
+        });
+        row.find('#end-timepicker-' + counter).datetimepicker({
+            format: 'LT',
+            buttons: {
+                showClose: true,
+                showToday: true,
+                showClear: true,
+                showCancel: true,
+                showOK: true
+            }
+        });
+
+        // Add the new row to the container
+        $('.container').append(row);
+
+        // Update the times array
+        updateTimes();
+        }
+    });
+
+    // Remove timepicker fields when "Remove" button is clicked
+    $(document).on('click', '.remove-time', function () {
+        $(this).closest('.row').remove(); // Remove the row
+        updateTimes(); // Update the times array
+    });
+
+    // Update the times array when a timepicker field is changed
+    $(document).on('change', '.datetimepicker-input', function() {
+        updateTimes();
+        console.log(timesJson);
+    });
+</script>
+
+               
+
+</body>
+
+</html>

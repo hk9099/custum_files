@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google SERP API Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/@scrapeit-cloud/google-serp-api/index.min.js"></script>
+</head>
+<body>
+  <h1>Google SERP API Example</h1>
+  <div id="results"></div>
+
+  <script>
+
+    
+
+    // Define your query parameters
+    const params = {
+      q: 'example query', // Your search query
+      num: 10, // Number of results per page
+      start: 0, // Start index of results
+      hl: 'en', // Language of search results
+    };
+
+    // Make a request to the SERP API
+    const scraper = new googleSerpApi.Scraper();
+    scraper.search(params)
+      .then(data => {
+        // Handle the API response
+        console.log(data);
+        // Display the results on the page
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        // Handle any errors
+        console.error(error);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>j-query header</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="box justify-center align-center">
+            <h2>Hello</h2>
+            <p align="justify">Lorem ipsum diatur vitae ea incidunt ipsam quisquam. Doloribus repellendus recusandae
+                odit expedita, doloremque ut commodi corrupti ad unde facere error consequuntur quidem! Quam nam, totam
+                consequatur vitae sequi dolor expedita possimus natus dicta. Similique alias, cum minus mollitia non
+                dolores animi, ipsam quisquam maiores dolorum deserunt laudantium aliquam provident tempora suscipit
+                corrupti exercitationem possimus ratione voluptatum fugiat id. Quibusdam, rerum quidem autem
+                perspiciatis suscipit veritatis cum illum saepe! Numquam voluptates corrupti autem optio, rem porro nam
+                natus.</p>
+
+        </div>
+        <div class="switch d-flex">
+            <div>
+                <div class="icon">=</div>
+            </div>
+            <ul class="setting">
+                <li style="background-color: yellow;"></li>
+                <li style="background-color: blue;"></li>
+                <li style="background-color: orange;"></li>
+                <li style="background-color: green;"></li>
+                <li style="background-color: purple;"></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+                $(".setting li").click(function () {
+                    var color = $(this).css("background-color");
+                    $(".box").css("background-color", color);
+                });
+            });
+
+    </script>
+
+</body>
+
+</html>

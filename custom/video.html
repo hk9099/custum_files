@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video with close buttton</title>
+    <style>
+        /*design input file button*/
+        .select_video{
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #f5f5f5;
+        }
+
+        /*design video*/
+        video {
+            /* border: 1px solid #ccc; */
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .videocontainer {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        /*design close button*/
+        #closeBtn {
+            position: absolute;
+            top: 0;
+            right: -14px;
+            margin: 10px;
+            background-color: #ff655a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #closeBtn:hover {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- //select video and preview it in the browser  -->
+    <label for="file" class="custom-file-upload">Select Video</label>
+    <input type="file" id="file" class="select_video" accept="video/*" onchange="loadFile(event)">
+    <div class="videocontainer">
+        <video id="output" width="20%" height="20%" autoplay></video>
+        <button id="closeBtn">X</button>
+    </div>
+
+    <script>
+        
+    var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.load();
+            output.play();
+        };
+
+        //show close button when video is selected and hide it when video is not selected
+        var file = document.getElementById('file');
+        var closeBtn = document.getElementById('closeBtn');
+        file.addEventListener('change', function () {
+            if (file.value) {
+                closeBtn.style.display = 'block';
+            } else {
+                closeBtn.style.display = 'none';
+            }
+        });
+
+        //close button functionality
+        closeBtn.addEventListener('click', function () {
+            file.value = '';
+            output.src = '';
+            closeBtn.style.display = 'none';
+        });
+
+    </script>
+
+
+
+</body>
+
+</html>

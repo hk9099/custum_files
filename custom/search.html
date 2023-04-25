@@ -1,0 +1,97 @@
+<div id="users">
+
+    <input class="search" placeholder="Search" />
+    <button class="sort" data-sort="name">
+        Sort
+    </button>
+
+    <ul class="list"></ul>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+    <script>
+        var options = {
+            valueNames: ['name', 'born'],
+            // Since there are no elements in the list, this will be used as template.
+            item: '<li><h3 class="name"></h3><p class="born"></p></li>'
+        };
+
+        var values = [
+                {
+                    "name": "Herman Huber",
+                    "phone": "(852) 149-4852",
+                    "email": "placerat.orci@outlook.org",
+                    "address": "Ap #507-5515 Quis Av.",
+                    "postalZip": "1126",
+                    "country": "Netherlands",
+                    "region": "Newfoundland and Labrador",
+                    "numberrange": 4,
+                    "text": "euismod urna. Nullam lobortis quam a felis ullamcorper viverra. Maecenas",
+                    "currency": "$31.93",
+                    "list": 9,
+                    "alphanumeric": "BGD15ZNA8WY"
+                },
+                {
+                    "name": "Wing Hays",
+                    "phone": "1-457-884-3467",
+                    "email": "iaculis@yahoo.couk",
+                    "address": "Ap #515-2927 Nibh St.",
+                    "postalZip": "582822",
+                    "country": "Peru",
+                    "region": "Cartago",
+                    "numberrange": 7,
+                    "text": "eget nisi dictum augue malesuada malesuada. Integer id magna et",
+                    "currency": "$8.58",
+                    "list": 11,
+                    "alphanumeric": "UPB76OMU0JS"
+                },
+                {
+                    "name": "Rhonda Christensen",
+                    "phone": "(360) 790-0153",
+                    "email": "malesuada@yahoo.edu",
+                    "address": "872-5567 Rhoncus. Road",
+                    "postalZip": "13134-38464",
+                    "country": "Austria",
+                    "region": "Podkarpackie",
+                    "numberrange": 8,
+                    "text": "et libero. Proin mi. Aliquam gravida mauris ut mi. Duis",
+                    "currency": "$15.01",
+                    "list": 1,
+                    "alphanumeric": "UME69FTS2KI"
+                },
+                {
+                    "name": "Nasim Hooper",
+                    "phone": "1-569-992-3694",
+                    "email": "ac.facilisis@outlook.edu",
+                    "address": "158-7538 Nonummy. Rd.",
+                    "postalZip": "06577",
+                    "country": "Singapore",
+                    "region": "Niger",
+                    "numberrange": 6,
+                    "text": "pede blandit congue. In scelerisque scelerisque dui. Suspendisse ac metus",
+                    "currency": "$24.90",
+                    "list": 11,
+                    "alphanumeric": "TWN52WMH3RM"
+                },
+                {
+                    "name": "Garth Wilder",
+                    "phone": "(196) 627-4411",
+                    "email": "pede.nunc@yahoo.org",
+                    "address": "601-3540 Sodales Road",
+                    "postalZip": "8378 DT",
+                    "country": "Spain",
+                    "region": "Khmelnytskyi oblast",
+                    "numberrange": 0,
+                    "text": "netus et malesuada fames ac turpis egestas. Aliquam fringilla cursus",
+                    "currency": "$67.36",
+                    "list": 3,
+                    "alphanumeric": "DPK41WEC3FQ"
+                }
+            ];
+
+        var userList = new List('users', options, values);
+
+        userList.add({
+            name: 'Gustaf Lindqvist',
+            born: 1983
+        });
+    </script>
+</div>

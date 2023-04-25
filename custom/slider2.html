@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+</head>
+
+<body>
+
+    <div id="slider"></div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: true,
+                responsive: {
+                    0: {
+                        items: 2
+                    },
+                    600: {
+                        items: 4
+                    },
+                    1000: {
+                        items: 6
+                    }
+                }
+            })
+        });
+
+        $.ajax({
+            url: "",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var html = "";
+                html += `<div class="owl-carousel owl-theme">`
+                for (var i = 0; i < data.data.length; i++) {
+                    html += `<div class="item">
+                        <h1>${data.data[i].email}</h1>
+                        <div><img src="${data.data[i].avatar}"></div>
+                        </div>`
+                }
+                html += `</div>`;
+                document.getElementById("slider").innerHTML = html;
+            }
+        });
+    </script>
+</body>
+
+</html>

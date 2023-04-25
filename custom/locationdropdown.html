@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Location Dropdown</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
+</head>
+<body>
+    <h1>Dynamic Location Dropdown</h1>
+    <select class="select2" id="locationDropdown" style="width: 300px;"></select>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('.select2').select2();
+
+            // Get location data dynamically
+            var locationData = [
+                { id: 1, text: 'Location 1' },
+                { id: 2, text: 'Location 2' },
+                { id: 3, text: 'Location 3' },
+                // Add more locations as needed
+            ];
+
+            // Populate Select2 dropdown with location data
+            $('#locationDropdown').empty();
+            $.each(locationData, function(index, location) {
+                $('#locationDropdown').append('<option value="' + location.id + '">' + location.text + '</option>');
+            });
+            $('#locationDropdown').trigger('change');
+        });
+    </script>
+
+</body>
+</html>

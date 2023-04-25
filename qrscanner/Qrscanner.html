@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Scanner App</title>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode/dist/dbr.js"></script>
+    <style>
+        #scanner-container {
+            width: 100%;
+            height: 300px;
+        }
+
+        #result-container {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>QR Code Scanner App</h1>
+    <div id="scanner-container"></div>
+    <div id="result-container">
+        <h1 id="result"></h1>
+    </div>
+    <script>
+        // specify a license, you can visit https://www.dynamsoft.com/customer/license/trialLicense?utm_source=intro&product=dbr&package=js to get your own trial license good for 30 days. 
+        Dynamsoft.DBR.BarcodeScanner.license = 'DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNzk3NzM3LVRYbFhaV0pRY205cVgyUmljZyIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21sdHMuZHluYW1zb2Z0LmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAxNzk3NzM3IiwiY2hlY2tDb2RlIjotODQ3MTg1NzczfQ==';
+        (async () => {
+            let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+            scanner.onUniqueRead = (txt, result) => {
+                document.getElementById('result').innerText = txt;
+            };
+            await scanner.show();
+        })();
+    </script>
+</body>
+
+</html>

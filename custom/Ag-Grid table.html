@@ -1,0 +1,104 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ag Grid App</title>
+    <!-- Include the JS for AG Grid -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/ag-grid-enterprise@29.1.0/dist/ag-grid-enterprise.min.js"></script>
+    <!-- Include the CSS for AG Grid -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-grid.css" /> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-theme-alpine.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/styles/ag-theme-alpine-dark.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css" />
+    <!-- Include the theme CSS, only need to import the theme you are going to use -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css" />
+</head>
+
+<body>
+    <div id="myGrid" class="ag-theme-alpine" style="height: 500px"></div>
+    <script type="text/javascript">
+    const gridOptions = {
+            columnDefs: [
+                {  field: 'athlete', rowDrag: true, delete: true, checkboxSelection: true, menuTabs: ['filterMenuTab', 'generalMenuTab'] , cellRenderer: 'deleteButtonRenderer'},
+                { field: 'age' },
+                { field: 'country' },
+                { field: 'year', width: 100 },
+                { field: 'date' },
+                { field: 'sport' },
+                { field: 'gold' },
+                { field: 'silver' },
+                { field: 'bronze' },
+                { field: 'age' },
+                { field: 'country' },
+                { field: 'year', width: 100 },
+                { field: 'date' },
+                { field: 'sport' },
+                { field: 'gold' },
+                { field: 'silver' },
+                { field: 'bronze' },
+            ],
+            defaultColDef: {
+                width: 170,
+                sortable: true,
+                filter: true,
+                selectable: true,
+                resizable: true,
+                editable: true,
+                flex: 1,
+                minWidth: 100,
+                
+            },
+            rowDragManaged: true,
+            animateRows: true,
+            pagination: true,
+            paginationPageSize: 10,
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            enableRangeSelection: true,
+            enableCharts: true,
+            enableCellTextSelection: true,
+            enableCellChangeFlash: true,
+            enableBrowserTooltips: true,
+            enableStatusBar: true,
+            
+
+        };
+
+        gridOptions.frameworkComponents = {
+                deleteButtonRenderer: DeleteButtonRenderer,
+            };
+
+            function DeleteButtonRenderer() { }
+
+            DeleteButtonRenderer.prototype.init = function (params) {
+                this.eGui = document.createElement('button');
+                this.eGui.innerHTML = 'Delete';
+                this.eGui.addEventListener('click', function () {
+                    params.api.applyTransaction({ remove: [params.node.data] });
+                });
+            };
+
+            DeleteButtonRenderer.prototype.getGui = function () {
+                return this.eGui;
+            };
+
+
+
+        // setup the grid after the page has finished loading
+        document.addEventListener('DOMContentLoaded', function () {
+            var gridDiv = document.querySelector('#myGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+
+            fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+                .then((response) => response.json())
+                .then((data) => gridOptions.api.setRowData(data));
+        });
+    </script>
+</body>
+
+</html>

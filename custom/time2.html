@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Time Picker Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@holema/mdtimepicker@1.1.0/dist/mdtimepicker.css">
+</head>
+
+
+<body>
+    <div id="timepickers">
+        <label for="start-time">Start Time:</label>
+        <input type="text" id="start-time" class="timepicker" />
+        <label for="end-time">End Time:</label>
+        <input type="text" id="end-time" class="timepicker" />
+    </div>
+    <button id="add-btn">Add</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@holema/mdtimepicker@1.1.0/dist/mdtimepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+
+    <script>
+        var timepickerContainer = document.getElementById('timepickers');
+        var idCounter = 0;
+        var timePairs = [];
+
+        document.getElementById('add-btn').addEventListener('click', function () {
+            addTimepickerPair();
+        });
+
+        var startTimepicker = new mdtimepicker(document.querySelector('.timepicker'));
+        startTimepicker.time = moment().startOf('day');
+
+        var endTimepicker = new mdtimepicker(document.querySelectorAll('.timepicker')[1]);
+        endTimepicker.time = moment().startOf('day');
+
+        //push the first time pair to the array
+        timePairs.push({
+            startTime: document.querySelector('#start-time').value,
+            endTime: document.querySelector('#end-time').value
+        });
+
+        timepickerContainer.addEventListener('click', function (event) {
+            if (event.target && event.target.className === 'remove-btn') {
+                var index = Array.prototype.indexOf.call(timepickerContainer.children, event.target.parentNode);
+                timePairs.splice(index, 1);
+                event.target.parentNode.remove();
+                console.log(timePairs);
+            }
+        });
+
+        function addTimepickerPair() {
+            idCounter++;
+            var newTimepickerPair = document.createElement('div');
+            newTimepickerPair.innerHTML = `
+    <label for="start-time-${idCounter}">Start Time:</label>
+    <input type="text" id="start-time-${idCounter}" class="timepicker" />
+    <label for="end-time-${idCounter}">End Time:</label>
+    <input type="text" id="end-time-${idCounter}" class="timepicker" />
+    <button class="remove-btn">Remove</button>
+  `;
+            timepickerContainer.appendChild(newTimepickerPair);
+
+            var startTimepicker = new mdtimepicker(newTimepickerPair.querySelector('.timepicker'));
+            startTimepicker.time = moment().startOf('day');
+
+            var endTimepicker = new mdtimepicker(newTimepickerPair.querySelectorAll('.timepicker')[1]);
+            endTimepicker.time = moment().startOf('day');
+
+            
+            var startInput = newTimepickerPair.querySelector(`#start-time-${idCounter}`);
+            var endInput = newTimepickerPair.querySelector(`#end-time-${idCounter}`);
+
+            if (startInput.value === '' || endInput.value === '') {
+                alert('Please select both start and end times.');
+                newTimepickerPair.remove();
+                return;
+            }
+
+            timePairs.push({
+                startTime: startInput.value,
+                endTime: endInput.value
+            });
+
+            console.log(timePairs);
+
+            // Hide the "Remove" button from the first time picker pair
+            if (idCounter === 1) {
+                var removeBtn = newTimepickerPair.querySelector('.remove-btn');
+                removeBtn.style.display = 'none';
+            }
+
+            startTimepicker.on('timechanged', function () {
+                timePairs[idCounter - 1].startTime = startInput.value;
+                console.log(timePairs);
+            });
+
+            endTimepicker.on('timechanged', function () {
+                timePairs[idCounter - 1].endTime = endInput.value;
+                console.log(timePairs);
+            });
+        }
+
+    </script>
+
+
+
+
+</body>
+
+
+
+</html>

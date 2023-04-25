@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Auto-Resize Image Demo</title>
+</head>
+
+<body>
+    <input type="file" id="file-input" multiple>
+        <br>
+        <div id="preview-container"></div>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            // Get the file input element and the preview container element
+            const fileInput = document.getElementById('file-input');
+            const previewContainer = document.getElementById('preview-container');
+
+            // Add an event listener to the file input element
+            fileInput.addEventListener('change', function (event) {
+                const files = event.target.files;
+
+                // Loop through each file in the selected files
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+
+                    // Check if the file is an image
+                    if (file.type.startsWith('image/')) {
+
+                        // Create a new FormData object to send the file to the server
+                        const formData = new FormData();
+                        formData.append('image_file', file);
+
+                        // Make an API call to Remove.bg to remove the background of the image
+                        axios.post('https://api.remove.bg/v1.0/removebg', formData, {
+                            headers: {
+                                'X-Api-Key': 'PwGSrqFUgvmRjfCGkarr3vfV'
+                            },
+                            responseType: 'blob',
+
+                        })
+                            .then(response => {
+
+                                // Create a new Image object with the response data
+                                const image = new Image();
+                                image.src = URL.createObjectURL(new Blob([response.data]));
+
+                                // Add an event listener to the image element
+                                image.addEventListener('load', function () {
+
+                                    // Get the desired dimensions for the resized image
+                                    const maxWidth = 1200;
+                                    const maxHeight = 480;
+
+                                    // Calculate the new dimensions for the resized image
+                                    let newWidth = image.width;
+                                    let newHeight = image.height;
+                                    if (image.width > maxWidth || image.height > maxHeight) {
+                                        const widthRatio = maxWidth / image.width;
+                                        const heightRatio = maxHeight / image.height;
+                                        const ratio = Math.min(widthRatio, heightRatio);
+                                        newWidth = Math.round(image.width * ratio);
+                                        newHeight = Math.round(image.height * ratio);
+                                    }
+
+                                    // Create a new canvas element with the new dimensions
+                                    const canvas = document.createElement('canvas');
+                                    canvas.width = newWidth;
+                                    canvas.height = newHeight;
+                                    const ctx = canvas.getContext('2d');
+                                    ctx.fillStyle = "#fff"; // set fill color to white
+                                    ctx.fillRect(0, 0, newWidth, newHeight); // fill the canvas with white color
+
+                                    ctx.drawImage(image, 0, 0, newWidth, newHeight);
+                                    // Get the resized image as a data URL
+                                    const resizedDataUrl = canvas.toDataURL(file.type);
+
+                                    // Create a new image element with the resized image
+                                    const previewImg = document.createElement('img');
+                                    previewImg.src = resizedDataUrl;
+
+                                    // Add the preview image element to the preview container element
+                                    previewContainer.appendChild(previewImg);
+                                });
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                }
+            });
+        </script>
+</body>
+
+</html>

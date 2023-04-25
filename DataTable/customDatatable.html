@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Dynamic Table</title>
+    <style>
+        #table-container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #table-search {
+            margin-bottom: 20px;
+        }
+
+        #table-search label {
+            display: inline-block;
+            width: 50px;
+        }
+
+        #table-search input {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #table th,
+        #table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #table th {
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        #table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        #table-pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #table-pagination button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #table-pagination button:hover {
+            background-color: #eee;
+        }
+
+        #table-pagination button.active {
+            background-color: #eee;
+        }
+
+        #pageSize {
+            margin-left: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #pageSize option {
+            padding: 5px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .pagination a {
+            display: inline-block;
+            margin: 0 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            background-color: #fff;
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .pagination a.active,
+        .pagination a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="table-container">
+        <div id="table-search">
+            <label for="search">Search:</label>
+            <input type="text" id="search"/>
+            <select id="pageSize" onchange="createTable(currentPage)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+        </div>
+        <table id="table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Name</th>
+                    <th onclick="sortTable(1)">Age</th>
+                    <th onclick="sortTable(2)">Gender</th>
+                    <th onclick="sortTable(3)">City</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <div class="table-pagination">
+            <a href="#" class="prev-link">&laquo; Prev</a>
+            <span class="page-links"></span>
+            <a href="#" class="next-link">Next &raquo;</a>
+        </div>
+
+    </div>
+</body>
+
+<script>
+    const data = [
+        { name: 'John Doe', age: 25, gender: 'Male', city: 'New York' },
+        { name: 'Jane Smith', age: 30, gender: 'Female', city: 'Los Angeles' },
+        { name: 'Bob Johnson', age: 45, gender: 'Male', city: 'Chicago' },
+        { name: 'Sara Lee', age: 28, gender: 'Female', city: 'San Francisco' },
+        { name: 'Tommy Lee', age: 35, gender: 'Male', city: 'Seattle' },
+        { name: 'Lucy Liu', age: 27, gender: 'Female', city: 'Boston' },
+        { name: 'David Brown', age: 50, gender: 'Male', city: 'Houston' },
+        { name: 'Emily Davis', age: 32, gender: 'Female', city: 'Miami' },
+        { name: 'Steve Kim', age: 40, gender: 'Male', city: 'Denver' },
+        { name: 'Grace Lee', age: 29, gender: 'Female', city: 'Atlanta' },
+        { name: 'John Doe', age: 25, gender: 'Male', city: 'New York' },
+        { name: 'Jane Smith', age: 30, gender: 'Female', city: 'Los Angeles' },
+        { name: 'Bob Johnson', age: 45, gender: 'Male', city: 'Chicago' },
+        { name: 'Sara Lee', age: 28, gender: 'Female', city: 'San Francisco' },
+        { name: 'Tommy Lee', age: 35, gender: 'Male', city: 'Seattle' },
+        { name: 'Lucy Liu', age: 27, gender: 'Female', city: 'Boston' },
+        { name: 'David Brown', age: 50, gender: 'Male', city: 'Houston' },
+        { name: 'Emily Davis', age: 32, gender: 'Female', city: 'Miami' },
+        { name: 'Steve Kim', age: 40, gender: 'Male', city: 'Denver' },
+    ];
+
+    let currentPage = 1; // Current page number
+    let totalRows = data.length; // Total number of rows in the table
+    let pageSize = Number(document.getElementById('pageSize').value); // Number of rows per page
+    let totalPages = Math.ceil(totalRows / pageSize); // Total number of pages in the table
+
+
+    // Function to handle the page size dropdown change event
+    function handlePageSizeChange() {
+        pageSize = Number(document.getElementById('pageSize').value); // Update the pageSize variable
+        currentPage = 1; // Reset the currentPage variable to 1
+        totalPages = Math.ceil(totalRows / pageSize); // Recalculate the totalPages variable
+        createTable(currentPage); // Call the createTable function with the currentPage variable
+    }
+
+    // Attach the handlePageSizeChange function to the onchange event of the pageSize dropdown
+    document.getElementById('pageSize').onchange = handlePageSizeChange;
+
+
+    // Get the table body element
+    const tableBody = document.getElementById('table-body');
+
+    // Function to create the table rows
+    function createTableRows(page) {
+        // Calculate the start and end indexes of the rows for the current page
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = Math.min(startIndex + pageSize, totalRows);
+
+        // Clear the table body
+        tableBody.innerHTML = '';
+
+        // Loop through the data and create a table row for each object
+        for (let i = startIndex; i < endIndex; i++) {
+            const row = tableBody.insertRow();
+            const { name, age, gender, city } = data[i];
+
+            row.insertCell().textContent = name;
+            row.insertCell().textContent = age;
+            row.insertCell().textContent = gender;
+            row.insertCell().textContent = city;
+        }
+    }
+
+    // Function to create the pagination links
+    function createPaginationLinks(page) {
+        // Get the pagination elements
+        const pagination = document.querySelector('.table-pagination');
+        const prevLink = pagination.querySelector('.prev-link');
+        const pageLinks = pagination.querySelector('.page-links');
+        const nextLink = pagination.querySelector('.next-link');
+
+        // Clear the page links
+        pageLinks.innerHTML = '';
+
+        // Create the previous page link
+        const prevLinkClone = prevLink.cloneNode(true);
+        prevLinkClone.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                createTable(currentPage);
+            }
+        };
+        prevLink.replaceWith(prevLinkClone);
+
+        // Create the page links
+        for (let i = 1; i <= totalPages; i++) {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = i;
+
+            if (i === page) {
+                link.classList.add('active');
+            } else {
+                link.onclick = () => {
+                    currentPage = i;
+                    createTable(currentPage);
+                };
+            }
+
+            pageLinks.appendChild(link);
+        }
+
+        // Create the next page link
+        const nextLinkClone = nextLink.cloneNode(true);
+        nextLinkClone.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                createTable(currentPage);
+            }
+        };
+        nextLink.replaceWith(nextLinkClone);
+    }
+
+
+
+    // Function to create the table
+    function createTable(page) {
+            // Get the search input value
+            const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
+
+            // Filter the data based on the search input
+            const filteredData = data.filter(row =>
+                row.name.toLowerCase().includes(searchValue) ||
+                row.age.toString().includes(searchValue) ||
+                row.gender.toLowerCase().includes(searchValue) ||
+                row.city.toLowerCase().includes(searchValue)
+            );
+
+            // Update the totalRows variable with the length of the filtered data
+            totalRows = filteredData.length;
+
+            // Recalculate the totalPages variable
+            totalPages = Math.ceil(totalRows / pageSize);
+
+            // Create the table rows for the current page
+            createTableRows(page, filteredData);
+
+            // Create the pagination links for the current page
+            createPaginationLinks(page);
+        }
+
+
+    // Create the table
+    createTable(currentPage);
+
+    let sortAsc = true; // variable to keep track of current sort order
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById('table');
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].textContent;
+            const cellB = rowB.cells[columnIndex].textContent;
+            return cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        if (!sortAsc) {
+            rows.reverse(); // reverse the order if sortAsc is false
+        }
+
+        tbody.append(...rows);
+
+        sortAsc = !sortAsc; // toggle the sort order variable
+    }
+
+
+
+
+</script>
+
+</html>

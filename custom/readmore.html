@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, ullam earum. Quaerat ducimus, voluptas perferendis
+        ab fugiat in, beatae earum ullam placeat commodi atque nobis fuga accusantium deserunt nulla labore perspiciatis
+        molestiae! Odio tenetur explicabo dolores cupiditate quibusdam vero, optio sit modi, deserunt corporis aliquid
+        sequi perferendis veniam minus similique quis aspernatur ex beatae quia? Voluptas quisquam aliquam quia rem
+        explicabo accusamus aut nesciunt aperiam facere earum? Quam harum provident est accusamus totam, eos temporibus
+        possimus et dignissimos velit unde maiores impedit voluptas facere quidem quas repellendus consequatur! Officiis
+        id veniam vitae unde aperiam accusamus et ullam itaque delectus tempore at aliquid amet repellendus neque,
+        placeat voluptas eum? Reprehenderit laborum qui numquam delectus fugiat dolores consequuntur laboriosam autem
+        quo et eveniet magni vitae sit reiciendis excepturi, hic ad aspernatur! Fugit nemo facere dignissimos nesciunt
+        expedita, reiciendis similique tempore quisquam eum corporis odio sapiente a sed praesentium autem vero quos
+        architecto commodi iste vel voluptate ullam aperiam asperiores labore? Hic ullam, maxime ex inventore debitis
+        sed aliquam tempore nobis doloremque amet cumque in odio molestiae eius ea rerum impedit. Aspernatur, esse
+        tempora non expedita reprehenderit numquam corporis voluptate? Et nemo error expedita doloremque eos
+        exercitationem, earum, cupiditate dolore, enim sit velit.
+    </p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        //if text is more than 100 characters, then set the text to 100 characters and add "..." at the end of the text
+        let text = document.querySelector("p").innerText;
+        if (text.length > 100) {
+            document.querySelector("p").innerText = text.substring(0, 100) + "...";
+        } 
+
+        //when the user clicks on the text, then show and hide the text 
+        document.querySelector("p").addEventListener("click", function () {
+            if (document.querySelector("p").innerText.length > 100) {
+                document.querySelector("p").innerText = text;
+            } 
+            //if the text is already shown, then hide the text
+            else {
+                document.querySelector("p").innerText = text.substring(0, 100) + "...";
+            }
+        });
+
+        //when the user hovers over the text, then change the cursor to a pointer
+        document.querySelector("p").addEventListener("mouseover", function () {
+            document.querySelector("p").style.cursor = "pointer";
+        }); 
+
+        //when the user hovers out of the text, then change the cursor back to default
+        document.querySelector("p").addEventListener("mouseout", function () {
+            document.querySelector("p").style.cursor = "default";
+        }); 
+
+
+
+
+    </script>
+</body>
+
+</html>

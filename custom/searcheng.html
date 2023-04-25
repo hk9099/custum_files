@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FlexSearch.js Example</title>
+</head>
+
+<body>
+    <input type="text" id="search-input" placeholder="Search...">
+    <ul id="search-results"></ul>
+
+    <script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Your FlexSearch code here
+
+            // Initialize FlexSearch
+            var index = new FlexSearch();
+
+            // Define your data
+            var data = [
+                { id: 1, title: 'Lorem Ipsum', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+                { id: 2, title: 'Sed ut perspiciatis', content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.' },
+                { id: 3, title: 'Neque porro quisquam est', content: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...' }
+            ];
+
+            // Add your data to the index
+            index.add(data);
+
+            // Get the search input and results container elements
+            var searchInput = document.getElementById('search-input');
+            var searchResults = document.getElementById('search-results');
+
+            // Add an event listener to the search input
+            searchInput.addEventListener('input', function () {
+                // Get the search query
+                var query = searchInput.value;
+
+                // Search the index
+                var results = index.search(query);
+
+                // Clear the previous search results
+                searchResults.innerHTML = '';
+
+                // Display the search results
+                results.forEach(function (result) {
+                    var li = document.createElement('li');
+                    li.innerText = result.title;
+                    searchResults.appendChild(li);
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>

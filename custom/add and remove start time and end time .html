@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="time"] {
+            position: relative;
+        }
+
+        input[type="time"]::before {
+            content: "AM";
+            position: absolute;
+            right: -20px;
+            top: 10px;
+        }
+
+        input[type="time"]::after {
+            content: "PM";
+            position: absolute;
+            right: -20px;
+            top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="row">
+            <label>Start Time:</label>
+            <input type="time" name="start[]" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])? (AM|am|PM|pm)">
+            <label>End Time:</label>
+            <input type="time" name="end[]" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])? (AM|am|PM|pm)">
+        </div>
+        <button id="add-row" onclick="addRow()">Add Row</button>
+        <button id="remove-row" onclick="removeRow()">Remove Row</button>
+    </div>
+
+
+    <script>
+        let count = 1;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let inputs = document.getElementsByClassName("time");
+            for (let i = 0; i < inputs.length; i++) {
+                setupTimepicker(inputs[i]);
+            }
+        });
+
+        function addRow() {
+            let container = document.getElementById("container");
+            let row = document.createElement("div");
+            row.className = "row";
+            row.innerHTML = `
+        <label>Start Time:</label>
+        <input type="time" name="start[]" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])? (AM|am|PM|pm)" >
+        <label>End Time:</label>
+        <input type="time" name="end[]" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])? (AM|am|PM|pm)">
+    `;
+            container.appendChild(row);
+            count++;
+        }
+
+        function removeRow() {
+            if (count > 1) {
+                let container = document.getElementById("container");
+                container.removeChild(container.lastChild);
+                count--;
+            }
+        }
+
+        function setupTimepicker(input) {
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Backspace") {
+                    if (input.value.length === 3 || input.value.length === 6) {
+                        input.value = input.value.slice(0, -1);
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

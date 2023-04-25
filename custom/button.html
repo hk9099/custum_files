@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        button {
+            width: 250px;
+            text-decoration: none;
+            text-align: center;
+            background: #f2305a;
+            padding: 15px 0;
+            border-radius: 50px;
+            color: #fff;
+            transition: all ease 0.2s;
+            -webkit-box-shadow: 2px 3px 2px 0px rgba(0, 0, 0, 0.17);
+            -moz-box-shadow: 2px 3px 2px 0px rgba(0, 0, 0, 0.17);
+            box-shadow: 2px 3px 2px 0px rgba(0, 0, 0, 0.17);
+            transition: all ease 0.2s;
+            position: relative;
+            overflow: hidden;
+            /* font-family: "McLaren", cursive; */
+            font-weight: 500;
+            border: none;
+            font-size: 30px;
+            animation: scale 2s infinite;
+        }
+
+
+        button::after {
+            content: "";
+            width: 30px;
+            height: 200px;
+            position: absolute;
+            left: -20px;
+            top: 0;
+            margin-top: -20px;
+            background: #fff;
+            opacity: 0.6;
+            filter: blur(20px);
+            animation: login-blur 2s infinite;
+            animation-delay: 0s;
+            transform-origin: top;
+        }
+
+        @keyframes login-blur {
+            from {
+                transform: translate(0) rotate(45deg);
+            }
+
+            to {
+                transform: translateX(370px) rotate(45deg);
+            }
+        }
+
+        @keyframes scale {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+     
+    </style>
+</head>
+
+<body>
+    <div class="button-container">
+        <button>BUTTON</button>
+    </div>
+</body>
+
+</html>

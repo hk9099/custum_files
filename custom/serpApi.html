@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results in X-Ray Format</title>
+    <style>
+        #xrayIframe {
+            width: 100%;
+            height: 100vh;
+            /* pointer-events: none; */
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results in X-Ray Format</h1>
+    <input type="text" id="searchQuery" placeholder="Enter your search query" onkeypress="generateXRayFile()">
+    <iframe id="xrayIframe" src="" frameborder="1"></iframe>
+
+    <script>
+        function generateXRayFile() {
+            var searchQuery = document.getElementById("searchQuery").value;
+            fetch(`https://cors-anywhere.herokuapp.com/https://www.google.com/search?q=${searchQuery}&aqs=chrome..69i57j0l5.1000j0j7&sourceid=chrome&ie=UTF-8&num=100&start=0&filter=0&gl=us&hl=en&cr=us&safe=off&client=firefox-b-d&dcr=0&sei=8Z9tX9XyJ4KZ5OUP9ZqQqA0`)
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // Display the fetched content in the iframe
+                var xrayIframe = document.getElementById("xrayIframe");
+                xrayIframe.srcdoc = data;
+            })
+            .catch(error => console.log(error));
+        }
+    </script>
+</body>
+</html>

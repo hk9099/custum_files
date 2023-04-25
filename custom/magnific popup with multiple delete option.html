@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>magnific popup with multiple delete option</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js"></script>
+
+</head>
+
+<body>
+
+    <body>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="file" name="image" class="form-control" id="upload_image" multiple>
+            </div>
+            <div class="col-md-6">
+                <a type="button" class="btn btn-success" id="upload_button">Upload</a>
+            </div>
+        </div>
+        <div class="popup-gallary" id="popup-gallary"></div>
+        <a class="btn btn-danger btn-sm delete_all" data-url="" id="delete_button" style="display: none;">Delete All
+            Selected</a>
+
+
+        <script>
+            document.getElementById('upload_button').addEventListener('click', function () {
+                var files = document.getElementById('upload_image').files;
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var imageType = /image.*/;
+                    if (!file.type.match(imageType)) {
+                        continue;
+                    }
+                    var objectURL = URL.createObjectURL(file);
+                    var image = `<div class="popup-gallery-item">
+                  <label>
+                    <input type="checkbox" name="image[]" value="${file.name}">
+                    <a href="${objectURL}" class="popup-gallery-link">
+                      <img src="${objectURL}" alt="${file.name}">
+                    </a>
+                    <a type="button" class="btn btn-danger btn-sm delete" data-url="${objectURL}"><i class="fa-solid fa-xmark"></i></a>
+                  </label>
+                </div>`;
+                    $('#popup-gallary').append(image);
+                    //when click on delete button it will remove the image
+                    $('.delete').click(function () {
+                        var url = $(this).data('url');
+                        URL.revokeObjectURL(url);
+                        $(this).closest('.popup-gallery-item').remove();
+                    });
+                }
+                $('.popup-gallery-link').magnificPopup({
+                    type: 'image',
+                    gallery: {
+                        enabled: true
+                    }
+                });
+            });
+
+            document.getElementById('delete_button').addEventListener('click', function () {
+                var images = document.getElementsByClassName('popup-gallery-item');
+                for (var i = images.length - 1; i >= 0; i--) {
+                    if (images[i].getElementsByTagName('input')[0].checked) {
+                        var url = images[i].getElementsByClassName('delete')[0].getAttribute('data-url');
+                        URL.revokeObjectURL(url);
+                        images[i].remove();
+                    }
+                }
+            });
+
+            //when click on checkbox it will show the delete button
+            $(document).on('change', 'input[type="checkbox"]', function () {
+                if ($('input[type="checkbox"]:checked').length > 0) {
+                    $('#delete_button').show();
+                } else {
+                    $('#delete_button').hide();
+                }
+            });
+
+        </script>
+
+    </body>
+
+
+    <style>
+        .popup-gallery-item {
+            display: inline-block;
+            margin: 10px;
+            position: relative;
+        }
+
+        .popup-gallery-item label {
+            display: block;
+            position: relative;
+        }
+
+        .popup-gallery-item label input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+
+        .popup-gallery-item label input:checked~.popup-gallery-link {
+            border: 2px solid #f00;
+        }
+
+        .popup-gallery-item .popup-gallery-link {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .popup-gallery-item .popup-gallery-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .popup-gallery-item .delete {
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 0 5px !important;
+        }
+    </style>
+</body>
+
+</html>

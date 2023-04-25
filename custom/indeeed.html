@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IndexedDB Example</title>
+</head>
+
+<body>
+<script>
+  // Open a connection to the database
+    let request = indexedDB.open('myDatabase', 1);
+
+    // Create the object store if it doesn't exist
+    request.onupgradeneeded = function (event) {
+        let db = event.target.result;
+        db.createObjectStore('myObjectStore', { keyPath: 'id' });
+    };
+
+    fetch('http://ec2-13-48-47-224.eu-north-1.compute.amazonaws.com/api/request_data')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                console.log(id);
+                addDataToIndexedDB(id);
+            }
+        });
+
+    // Function to fetch data and add it to IndexedDB
+    function addDataToIndexedDB(id) {
+        fetch(`http://ec2-13-48-47-224.eu-north-1.compute.amazonaws.com/api/request_data/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                // Start a transaction and add the data to the object store
+                let transaction = request.result.transaction(['myObjectStore'], 'readwrite');
+                let objectStore = transaction.objectStore('myObjectStore');
+                objectStore.add(data);
+
+                // Close the transaction and log success message
+                transaction.oncomplete = function () {
+                    console.log('Data added to IndexedDB');
+                };
+
+            });
+    }
+
+
+</script>
+
+</body>
+
+</html>

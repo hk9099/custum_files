@@ -1,0 +1,59 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="qrcode.qrcode.controller.View1"
+xmlns:html="http://www.w3.org/1999/xhtml">
+<App id="app">
+	<pages>
+	<Page id="page" title="Employee Attendance">
+		<content>
+		      <Button text="Scan" press="onBarcodeScan" icon="sap-icon://bar-code"/>
+			<Panel backgroundDesign="Transparent">
+					<Table id="Employee" items="{/daf_empattSet}">
+					<headerToolbar>
+					<Toolbar>
+					<Title text="{i18n>Employee Attendence Details}"/>
+					<ToolbarSpacer/>
+					<SearchField placeholder="Search By Name" width="50%" liveChange="onFilterInvoices1" search="onFilterInvoices"/>
+					</Toolbar>
+					</headerToolbar>
+					<items>
+					<ColumnListItem>
+					<cells>
+					<Text text="{Srno}"></Text>
+					<Text text="{Dinkid}"></Text>
+			<Text text="{path: 'Tdate', type:'sap.ui.model.type.Date', formatOptions : { pattern:'dd.MM.yyyy'}}"/>
+			<Text text="{path: 'Entrytime', type:'sap.ui.model.odata.type.Time', formatOptions: {pattern: 'HH:mm:ss'}}"/>
+			<Text text="{path: 'Exittime', type:'sap.ui.model.odata.type.Time', formatOptions: {pattern: 'HH:mm:ss'}}"/>
+		 	      <Text text="{path: 'Totalhrs', type:'sap.ui.model.odata.type.Time', formatOptions: {pattern: 'HH:mm:ss'}}"/>
+					<Text text="{Latehrs}"></Text>
+					</cells>
+					</ColumnListItem>
+					</items>
+					<columns>
+						<Column>
+							<Text text="Srno"></Text>
+						</Column>
+						<Column>
+							<Text id="Dinkid" text="Dinkid"></Text>
+						</Column>
+						<Column>
+							<Text text="Date"></Text>
+						</Column>
+						<Column>
+							<Text id="Entrytime1" text="In Time"></Text>
+						</Column>
+						<Column>
+							<Text id="Exittime2" text="Out Time"></Text>
+						</Column>
+						<Column>
+							<Text text="Total Hours"></Text>
+						</Column>
+						<Column>
+							<Text id="Latehrs3" text="Latehrs"></Text>
+						</Column>
+					        </columns>
+						</Table>
+					</Panel>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</core:View>

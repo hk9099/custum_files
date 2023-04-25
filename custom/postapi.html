@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>jQuery.post demo</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<body>
+
+    <div id="result"></div>
+
+
+    <script>
+
+
+        // console.log(token);
+        $.ajax({
+            url: "http://ec2-3-7-248-128.ap-south-1.compute.amazonaws.com/classregister/bXVRBiN0zCPcl25GQeTgZT9qNvx2",
+            type: 'GET',
+            headers: {
+                "Authorization": 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwNTU5YzU5MDgzZDc3YWI2NDUxOThiNTIxZmM4ZmVmZmVlZmJkNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vY2xhc3NkZWtoby0zNmE0OSIsImF1ZCI6ImNsYXNzZGVraG8tMzZhNDkiLCJhdXRoX3RpbWUiOjE2NzQxMTIyMjcsInVzZXJfaWQiOiJNc1p3blpCNk5XZENsZ2xxR3dubjdqcTUxWkozIiwic3ViIjoiTXNad25aQjZOV2RDbGdscUd3bm43anE1MVpKMyIsImlhdCI6MTY3NDExMjIyNywiZXhwIjoxNjc0MTE1ODI3LCJlbWFpbCI6InBwLmJpdGNvZGluZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJwcC5iaXRjb2RpbmdAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.P2AXnS1bUHSOf1LOKwX-FaQ6yWD67RLDtJPaKS496xPR0YkO0RPmpV4oFW5cgzBZhzMbZZY6aC84p969cMeHQAvxX1inapJSj6SvFAdmJdAY0cG7gmjrU_zYK56Sn6VgW6KtmgS6ckTlzuGG19IhQo9-nedMqM_CQQ4rtZRSCNhnIJfYgyqSbHROfyXrzJiQO6oVRiSA3UWPV8hCnTljm3uLocXCsLJNIuYDStwul084baboGS_42M4_SbNl9ozJGyihCPlgaFUlK50XzsgFwabUD0LE_FIK_8JdGwyV5s2JJIXgfNafXlYgHJYDPeX_XzxvgC5iEJcoS6EX7PKvOg'
+            },
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+        $.post("http://ec2-3-7-248-128.ap-south-1.compute.amazonaws.com/classregister/bXVRBiN0zCPcl25GQeTgZT9qNvx2", function (data, status) {
+            alert("Data: " + data + " Status: " + status); 
+            
+        });
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

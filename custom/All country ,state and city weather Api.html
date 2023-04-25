@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All country ,state and city weather Api</title>
+</head>
+
+<body>
+    <!-- <h1>Weather Api</h1> -->
+    <div id="weather"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>    
+        $(document).ready(function(){
+            $.ajax({
+                url: "https://api.weatherapi.com/v1/search.json?key=5a4edb1cbe2b4dee95963032232401&q=London",
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    var weather = "";
+                    for(var i=0; i<data.length; i++){
+                        weather += "<div class='weather'>" + data[i].name + "</div>";
+                    }
+                    $("#weather").html(weather);
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

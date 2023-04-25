@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Firebase Phone Authentication</title>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getAuth, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjRhGX3iPT2IgENRednh67hTdqtBFvagk",
+            authDomain: "classdekho-36a49.firebaseapp.com",
+            projectId: "classdekho-36a49",
+            storageBucket: "classdekho-36a49.appspot.com",
+            messagingSenderId: "853299703360",
+            appId: "1:853299703360:web:59b306f7b1b5f68c33f9a5",
+            measurementId: "G-JH9YSQTMDG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        console.log(app);
+
+        const auth = getAuth(app);
+        console.log(auth);
+
+        window.addEventListener('load', () => {
+            document.getElementById("sendotp").addEventListener("click", () => {
+                const phoneNumber = document.getElementById("phone-number").value;
+                console.log(phoneNumber);
+
+                signInWithPhoneNumber(auth, phoneNumber)
+                    .then((confirmationResult) => {
+                        // SMS sent. Prompt user to type the code from the message, then sign the
+                        // user in with confirmationResult.confirm(code).
+                        window.confirmationResult = confirmationResult;
+                        alert("OTP sent to your mobile numberrrrrrrrrrrrrrrrrrr");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+
+                alert("OTP sent to your mobile number");
+            });
+        });
+
+
+    </script>
+</head>
+
+<body>
+
+    <input type="text" id="phone-number" placeholder="Enter your phone number">
+    <button id="sendotp">Send OTP</button>
+</body>
+
+</html>

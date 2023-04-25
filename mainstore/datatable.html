@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datatable</title>
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.5/css/dx.light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.5/css/dx.greenmist.compact.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.5/css/dx.dark.compact.css" rel="stylesheet"> -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.5/css/dx.material.blue.dark.compact.css" rel="stylesheet"> -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.5/css/dx.material.blue.light.compact.css" rel="stylesheet"> -->
+
+
+</head>
+
+<body style="margin: 0;">
+
+
+    <div class="dx-viewport demo-container">
+        <div id="gridContainer"></div>
+        <div class="dx-viewport demo-container">
+            <div id="fileuploader">
+                <div class="widget-container">
+                    <div id="file-uploader"></div>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="events">
+            <div>
+                <div class="caption"> Fired events </div>
+                <div id="clear"></div>
+            </div>
+            <ul></ul>
+        </div> -->
+    </div>
+
+    <!-- <div id="myDataGrid"></div> -->
+    <!-- <div id="myPopup"></div> -->
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/event.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/supplemental.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/unresolved.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/22.2.5/js/dx.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devexpress-diagram/2.1.72/dx-diagram.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devexpress-gantt/4.1.42/dx-gantt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-quill/1.5.20/dx-quill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-aspnet-data/2.9.2/dx.aspnet.data.min.js"></script>
+    <script>
+        //file upload
+        $(() => {
+            const fileUploader = $('#file-uploader').dxFileUploader({
+                multiple: false,
+                accept: '.csv,.xlsx',
+                value: [],
+                uploadMode: 'instantly',
+                uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
+                onValueChanged(e) {
+                    const files = e.value;
+                    if (files.length > 0) {
+                        $('#selected-files .selected-item').remove();
+                        $.each(files, (i, file) => {
+                            const $selectedItem = $('<div />').addClass('selected-item');
+                            $selectedItem.append(
+                                $('<span />').html(`Name: ${file.name}<br/>`),
+                                $('<span />').html(`Size ${file.size} bytes<br/>`),
+                                $('<span />').html(`Type ${file.type}<br/>`),
+                                $('<span />').html(`Last Modified Date: ${file.lastModifiedDate}`)
+                            );
+                            $selectedItem.appendTo($('#selected-files'));
+                        });
+                        $('#selected-files').show();
+                    } else {
+                        $('#selected-files').hide();
+                    }
+                },
+                onUploaded: function (e) {
+                    const uploadedFile = e.request;
+                    console.log(`Uploaded file name: ${e.file.name}`);
+                },
+                onUploadError: function (e) {
+                    console.log(`File upload error: ${e.message}`);
+                },
+            }).dxFileUploader('instance');
+        });
+
+        //data grid
+        $(() => {
+
+            function logEvent(eventName) {
+                const logList = $('#events ul');
+                const newItem = $('<li>', { text: eventName });
+
+                logList.prepend(newItem);
+            }
+
+            var popup = $("#myPopup").dxPopup({
+                title: "Product Details",
+                showTitle: true,
+                width: "70%",
+                height: "70%",
+                contentTemplate: function () {
+                    // Add content for the popup
+                    // You can use the options.rowIndex to get the index of the clicked row
+                    // Use this index to get the data item from the table's data source
+                    // Display the data in the popup
+                }
+            }).dxPopup("instance");
+
+
+
+            $('#gridContainer').dxDataGrid({
+                dataSource: {
+                    store: {
+                        type: 'odata',
+                        url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
+                        key: 'Id',
+                        beforeSend(request) {
+                            const year = new Date().getFullYear() - 1;
+                            request.params.startDate = `${year}-05-10`;
+                            request.params.endDate = `${year}-5-15`;
+                        },
+                    },
+                },
+                showBorders: true,
+                editing: {
+                    mode: 'row',
+                    allowUpdating: true,
+                    useIcons: true,
+                    startEditAction: 'dblClick',
+                    allowAdding: true,
+                    allowDeleting: false,
+                },
+                columns: [
+                    {
+                        dataField: "Product",
+                        allowSearch: true,
+                        cellTemplate: function (container, options) {
+                            $("<a>")
+                                .text(options.value)
+                                .addClass("dx-link")
+                                .on("dxclick", function (e) {
+
+                                    // Prevent the opening of a new page
+                                    e.preventDefault();
+
+                                    // Show the popup
+                                    popup.show();
+
+                                    // Pass the row index to the popup
+                                    popup.option("rowIndex", options.rowIndex);
+                                })
+                                .appendTo(container);
+                        }
+                    },
+                    {
+                        dataField: 'Amount',
+                        caption: 'Sale Amount',
+                        dataType: 'number',
+                        format: 'currency',
+                        alignment: 'left',
+                        allowSearch: true,
+                    },
+                    {
+                        dataField: 'SaleDate',
+                        dataType: 'datetime',
+                        format: 'shortDateShortTime',
+                        allowSearch: true,
+                        useFilterPopup: true,
+                        useMaskBehavior: true,
+                        useKeyboard: true,
+                    },
+                    {
+                        dataField: 'Region',
+                        dataType: 'string',
+                        allowSearch: true,
+                    },
+                    {
+                        dataField: 'Sector',
+                        dataType: 'string',
+                        allowSearch: true,
+                    },
+                    {
+                        dataField: 'Channel',
+                        dataType: 'string',
+                        allowSearch: true,
+                    },
+                    {
+                        dataField: 'Customer',
+                        dataType: 'string',
+                        allowSearch: true,
+                    },
+                ],
+                onEditingStart() {
+                    logEvent('EditingStart');
+                },
+                onInitNewRow() {
+                    logEvent('InitNewRow');
+                },
+                onRowInserting() {
+                    logEvent('RowInserting');
+                },
+                onRowInserted() {
+                    logEvent('RowInserted');
+                },
+                onRowUpdating() {
+                    logEvent('RowUpdating');
+                },
+                onRowUpdated() {
+                    logEvent('RowUpdated');
+                },
+                onRowRemoving() {
+                    logEvent('RowRemoving');
+                },
+                onRowRemoved() {
+                    logEvent('RowRemoved');
+                },
+                onSaving() {
+                    logEvent('Saving');
+                },
+                onSaved() {
+                    logEvent('Saved');
+                },
+                onEditCanceling() {
+                    logEvent('EditCanceling');
+                },
+                onEditCanceled() {
+                    logEvent('EditCanceled');
+                },
+                // stateStoring: {
+                //     enabled: true,
+                //     type: "localStorage", // Save the grid state to local storage
+                //     storageKey: "myGridState" // Use a custom key to avoid conflicts with other grid instances
+                // },
+                paging: {
+                    pageSize: 50,
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [50, 100, 200],
+                    showInfo: true,
+                    showNavigationButtons: true,
+                    visible: true,
+                },
+                searchPanel: {
+                    visible: true,
+                    highlightCaseSensitive: true,
+                    placeholder: "Search...",
+                    position: "top",
+                },
+                groupPanel: { visible: true },
+                grouping: {
+                    autoExpandAll: false,
+                },
+                height: '100vh',
+                width: '100%',
+                allowColumnReordering: true,
+                allowColumnResizing: true,
+                allowSearch: true,
+                columnAutoWidth: true,
+                columnChooser: {
+                    enabled: true,
+                    mode: 'select',
+                    allowSearch: true,
+                    searchTimeout: 500,
+                    width: 500,
+                    height: 500,
+                    title: 'Column Chooser',
+                    emptyPanelText: 'Drag a column here to hide it',
+                    searchPlaceholder: 'Search...',
+                    position: {
+                        my: 'center',
+                        at: 'center',
+                        of: window,
+                    },
+                },
+                columnFixing: {
+                    enabled: true,
+                },
+                // columnHidingEnabled: true,
+                focusedRowEnabled: true,
+                rowAlternationEnabled: true,
+                hoverStateEnabled: true,
+                hoverState: {
+                    backgroundColor: '#61c6bf',
+                    borderColor: '#C7C7C7'
+                },
+                showBorders: true,
+                onCellHoverChanged: function (e) {
+                    if (e.event.type === "mouseenter") {
+                        e.component.focus(e.cellElement);
+                    }
+                },
+                showBorders: true,
+                resizing: {
+                    enabled: true,
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [50, 100, 200],
+                    showInfo: true,
+                    showNavigationButtons: true,
+                    showPageSizeSelector: true,
+                    visible: true
+                },
+                filterRow: { visible: true, applyFilter: "auto", showOperationChooser: true, showAllText: "Show all" },
+                headerFilter: { visible: true, allowSearch: true },
+                searchPanel: { visible: true, width: 500, placeholder: "Search..." },
+                // selection: { mode: 'multiple', showCheckBoxesMode: 'always', selectAllMode: 'allPages', showSelectionControls: true, allowSelectAll: true },
+                onContentReady(e) {
+                    if (!collapsed) {
+                        collapsed = true;
+                        e.component.expandRow(['EnviroCare']);
+                    }
+                },
+
+            });
+        });
+
+        let collapsed = false;
+
+        $('#clear').dxButton({
+            text: 'Clear',
+            onClick() {
+                $('#events ul').empty();
+            },
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dynamic rating from api using ajax</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="rating"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://ec2-3-7-248-128.ap-south-1.compute.amazonaws.com/classregister",
+                type: "GET",
+                success: function (data) {
+                    console.log(data);
+                    var rating = data.products[5].rating;
+                    var rating = Math.round(rating / 1);
+                    console.log(rating);
+                    //set half star rating to 0 
+                    var halfStar = 0;
+                    //set full star rating to 0
+                    var fullStar = 0;
+                    //set empty star rating to 0
+                    var emptyStar = 0;
+                    //set half star rating to 0
+                    if (rating % 2 != 0) {
+                        halfStar = 1;
+                        rating = rating - 1;
+                    }
+                    //set full star rating to 0
+                    fullStar = rating / 1;
+                    //set empty star rating to 0
+                    emptyStar = 5 - (fullStar + halfStar);
+                    //set full star rating to 0
+                    for (var i = 0; i < fullStar; i++) {
+                        $("#rating").append('<i class="fas fa-star checked"></i>');
+                    }
+                    //set half star rating to 0
+                    for (var i = 0; i < halfStar; i++) {
+                        $("#rating").append('<i class="fas fa-star-half-alt checked"></i>');
+                    }
+                    //set empty star rating to 0
+                    for (var i = 0; i < emptyStar; i++) {
+                        $("#rating").append('<i class="far fa-star"></i>');
+                    }
+                }
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>

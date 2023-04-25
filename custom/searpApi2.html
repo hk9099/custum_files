@@ -1,0 +1,119 @@
+ <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Iframe Controller with JSON Viewer</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .iframe-container {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #jsonViewer {
+            height: 400px;
+            overflow-y: scroll;
+            background-color: #f8f8f8;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .pagination {
+            margin-top: 10px;
+        }
+
+        .pagination li {
+            cursor: pointer;
+            margin: 0 5px;
+            display: inline-block;
+            padding: 5px;
+            background-color: #f8f8f8;
+            border-radius: 3px;
+        }
+
+        .pagination li.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <div class="iframe-container">
+            <iframe id="iframe" src="" frameborder="0" width="100%" height="100%"></iframe>
+        </div>
+        <pre id="jsonViewer"></pre>
+        <ul class="pagination" id="pagination"></ul>
+    </div>
+    <script>
+        const apiKey = 'AIzaSyDL7YRGsA43Cd7mp3AIxFq9qna6zL56FA0'; // Replace with your own API key
+        const cx = '202b562b4ce0f41b8'; // Replace with your own CX ID
+        const searchInput = $('#searchInput');
+        const iframe = $('#iframe');
+        const jsonViewer = $('#jsonViewer');
+        const pagination = $('#pagination');
+        const resultsPerPage = 5; // Number of results to display per page
+        let currentPage = 1;
+        let totalResults = 0;
+
+        // Function to fetch search results from Google
+        function fetchSearchResults() {
+            const searchQuery = searchInput.val();
+            const startIndex = (currentPage - 1) * resultsPerPage + 1;
+            const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchQuery}&start=${startIndex}`;
+
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    totalResults = parseInt(response.searchInformation.totalResults);
+                    displaySearchResults(response.items);
+                    displayPagination();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // Function to display search results in the iframe and JSON viewer
+      function displaySearchResults(items) {
+            if (items) {
+                // Generate HTML for search results and set as iframe source
+                const iframeSrc = items.map(item => `<div>
+                                                                <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+                                                                <p>${item.snippet}</p>
+                                                            </div>`).join('');
+                iframe.attr('srcdoc', iframeSrc);
+
+                // Display response JSON in JSON viewer
+                jsonViewer.text(JSON.stringify(response, null, 2));
+                prettyPrint();
+            } else {
+                iframe.attr('srcdoc', '');
+                jsonViewer.empty();
+            }
+        }
+
+        // Event listener for search input
+        searchInput.on('input', fetchSearchResults);
+    </script>
+</body>
+
+</html>

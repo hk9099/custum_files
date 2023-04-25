@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+
+    <style>
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="time"] {
+            position: relative;
+        }
+
+        input[type="time"]::before {
+            content: "AM";
+            position: absolute;
+            right: -20px;
+            top: 10px;
+        }
+
+        input[type="time"]::after {
+            content: "PM";
+            position: absolute;
+            right: -20px;
+            top: 25px;
+        }
+
+        /* design timepicker */
+        .bootstrap-timepicker-widget.dropdown-menu {
+            width: 200px;
+            padding: 4px;
+            margin: 2px 0px 0px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Input for start time -->
+<div class="form-group">
+    <label for="start_time">Start Time</label>
+    <input type="text" class="form-control timepicker" id="start_time" name="start_time" value="9:00 AM">
+</div>
+
+<!-- Input for end time -->
+<div class="form-group">
+    <label for="end_time">End Time</label>
+    <input type="text" class="form-control timepicker" id="end_time" name="end_time" value="5:00 PM">
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.timepicker').timepicker({
+            showInputs: false,
+            showMeridian: false,
+            minuteStep: 1,
+            defaultTime: true,
+            showMeridian: true,
+            ampm: true,
+        });
+    }); 
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .upload_div,
+        .enter_detail_div,
+        p {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+
+        }
+
+        .upload_div input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+
+        }
+
+        .enter_detail_div h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            text-align: center;
+
+        }
+
+        .enter_detail_div input[type="text"],
+        .upload_div input[type="file"] {
+            display: block;
+            width: -webkit-fill-available;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            text-align: center;
+
+        }
+
+        .enter_detail_div button[type="submit"],
+        .upload_div button[type="submit"] {
+            background-color: #4CAF50;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+
+        }
+
+        .enter_detail_div button[type="submit"]:hover,
+        .upload_div button[type="submit"]:hover {
+            background-color: #3e8e41;
+
+        }
+
+        p {
+            text-align: center;
+        }
+
+        a {
+            background-color: #4CAF50;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #3e8e41;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <form action="/csv_upload" method="post" enctype="multipart/form-data" class="upload_div">
+        {% csrf_token %}
+        <input type="file" name="csv_file" required onchange="uploadFile()">
+        <button type="submit">Upload CSV</button>
+    </form> -->
+    <form id="upload_form" enctype="multipart/form-data" method="post" action="/csv_upload">
+        <input type="file" name="csv_file" id="file1" onchange="uploadFile()"><br>
+        <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+        <h3 id="status"></h3>
+        <p id="loaded_n_total"></p>
+    </form>
+
+    <br>
+    <form action="/get_code" method="post" enctype="multipart/form-data" class="enter_detail_div">
+        {% csrf_token %}
+        <h4>Enter Code</h4>
+        <input type="text" name="code" required>
+        <h4>Enter Location</h4>
+        <input type="text" name="new_location" required>
+        <button type="submit">Submit Code</button>
+    </form>
+    <p><a id="csv_path_id" download>Export CSV file</a></p>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+    var settings = {
+        "url": "/api/csv_path",
+        "method": "POST",
+        "timeout": 0,
+    };
+    $.ajax(settings).done(function (response) {
+        var csv_path = response.csv_path;
+        $('#csv_path_id').attr('href', csv_path);
+        console.log(csv_path);
+    });
+</script>
+
+<script>
+    // function _(el) {
+    //     return document.getElementById(el);
+    // }
+
+    function uploadFile(event) {
+        event.preventDefault(); // prevent form submission
+
+        var file = _("file1").files[0];
+        var formdata = new FormData();
+        formdata.append("csv_file", file);
+        var ajax = new XMLHttpRequest();
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", "/csv_upload");
+        ajax.send(formdata);
+    }
+
+
+    function progressHandler(event) {
+        _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+        var percent = (event.loaded / event.total) * 100;
+        _("progressBar").value = Math.round(percent);
+        _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }
+
+    function completeHandler(event) {
+        _("status").innerHTML = event.target.responseText;
+        _("progressBar").value = 0; //wil clear progress bar after successful upload
+    }
+
+    function errorHandler(event) {
+        _("status").innerHTML = "Upload Failed";
+    }
+
+    function abortHandler(event) {
+        _("status").innerHTML = "Upload Aborted";
+    }
+</script>
+
+</html>

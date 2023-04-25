@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>movie Api width search bar</title>
+</head>
+
+<body>
+
+    <h1>Movie Api</h1>
+    <div class="search__container">
+        <input type="text" id="search__input" placeholder="Search for a movie">
+    </div>
+
+    <div id="movie_container"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        //api call with search bar
+        $(document).ready(function () {
+            $("#search__input").keyup(function () {
+                var search = $("#search__input").val();
+                $.ajax({    
+                    url: "https://api.themoviedb.org/3/movie/?api_key=46319197f344a7c56629e123b9cc2e94&language=en-US&query=" + search + "&page=1&include_adult=false",
+                    method: "GET",
+                    headers: {
+                       Authorization : "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjMxOTE5N2YzNDRhN2M1NjYyOWUxMjNiOWNjMmU5NCIsInN1YiI6IjYzY2ZkMzZhOTE3NDViMDA4MTA3NTg5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zbKp50bU9N9W6YS0u1N1FsXAyDwRHpcebbbg7-FES3w "
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        var html = "";
+                        for (var i = 0; i < data.results.length; i++) {
+                            var title = data.results[i].title;
+                            var poster = data.results[i].poster_path;
+                            var overview = data.results[i].overview;
+                            var release = data.results[i].release_date;
+                            var vote = data.results[i].vote_average;
+                            var id = data.results[i].id;
+                            html += `<div class="movie__container">
+                                    <div class="movie__poster">
+                                        <img src="https://image.tmdb.org/t/p/w500/${poster}" alt="">
+                                    </div>
+                                    <div class="movie__info">
+                                        <h2>${title}</h2>
+                                        <p>${overview}</p>
+                                        <p>${release}</p>
+                                        <p>${vote}</p>
+                                        <p>${id}</p>
+                                        
+                                    </div>
+                                </div>`
+                        }
+                        $("#movie_container").html(html);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+        })
+
+    </script>
+</body>
+
+</html>
